@@ -13,7 +13,7 @@ void dfs(int x, int num){
 	}
 	if (x == n) return;
 	
-	for(int r = x; r < n; r++){
+	for(int r = x; r < n; r++){ //注意这里，从每一行开始后面的行都是可放可不放，所以要加这一重循环
 		for(int i = 0; i < n; i++){
 		if(maze[r][i] == '#' && !visit[i]){
 			visit[i] = true;
