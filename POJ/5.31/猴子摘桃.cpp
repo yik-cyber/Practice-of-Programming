@@ -21,17 +21,11 @@ int main(){
         for(int i = 0; i < cnt; i++){
             p = 0;int j; honey = n;
             for(j = i; j < cnt; j++){
-                if(honey - tree[j].bee >= 0){
-                  p += tree[j].peach;
-                  honey -= tree[j].bee;
-                }
-                else{
-                    ans = max(ans, p);
-                }
+                honey -= tree[j].bee;
+                if(honey < 0) break;
+                p += tree[j].peach;
             }
-            if (honey >= 0 && j == cnt){
-                ans = max(ans, p);
-            }
+            ans = max(ans, p);
         }
         cout << ans <<"\n";
     }
