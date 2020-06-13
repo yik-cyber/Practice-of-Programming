@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-int f[25];
+int f[1010];
 int num[25];
 int n, t;
 
@@ -15,5 +15,5 @@ int main() {
             f[j] += f[j-num[i]];
         }
     }
-    printf("%d", f[n]);
+    printf("%d", f[t]);
 }
