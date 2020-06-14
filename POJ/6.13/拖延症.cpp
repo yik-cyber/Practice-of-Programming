@@ -7,11 +7,12 @@ int tot_s, ans;
 vector<int> before, after;
 
 void dfs(int x, int value, int mental){
+    if (mental < 0) return; //注意这里的判断顺序233
     if (x == 16){
         if(before.size() <= after.size()) ans = max(ans, value);
         return;
     }
-    if (mental < 0) return;
+    
 
     if(x <= 10){
         before.push_back(x);
