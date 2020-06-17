@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
 char maze[510][510];
