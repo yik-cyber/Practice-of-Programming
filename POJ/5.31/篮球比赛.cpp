@@ -1,70 +1,66 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-char out[4][4];
-struct Team{
-    int point;
-    int grade;
-    bool operator<(Team b){
-        if (point == b.point) return grade < b.grade;
-        else return point > b.point;
-    }
-};
-int ans = 10;
 
-void dfs(Team t[], int g){
-    if (g > 2){
-        sort(t, t+4);
-        for(int i = 3; i >= 0; i--){
-            if (t[i].grade == 0) ans = min(ans, i+1); //mingci
+char matchs[5][5];
+unordered_map<int, int> grade;
+int ans = 5;
+
+void dfs(int g){
+    if(g == 5){
+        int sum = 0;
+        for(int i = 2; i <= 4; i++){
+            if(grade[i] > grade[1]) sum++;
         }
+        ans = min(ans, sum+1);
         return;
     }
+    bool check = false;
+    for(int j = 1; j < g; j++){
+        if(matchs[g][j] == '?'){
+            check = true;
+            matchs[g][j] = 'W';
+            grade[g]++;
+            dfs(g+1);
+            grade[g]--;
+            matchs[g][j] = '?';
 
-    bool ok = false;
-    for(int i = g+1; i < 4; i++){
-        if (out[g][i] != '?') continue;
-        ok = true;
-        out[g][i] = 'W'; out[i][g] = 'L';
-        t[g].point += 1;
-        dfs(t, g+1);
-        t[g].point -= 1;
-        out[g][i] = '?'; out[i][g] = '?';
-
-        out[g][i] = 'L'; out[i][g]  = 'W';
-        t[i].point += 1;
-        dfs(t, g+1);
-        t[i].point -= 1;
-        out[g][i] = '?'; out[i][g] = '?';
+            matchs[g][j] = 'L';
+            grade[j]++;
+            dfs(g+1);
+            grade[j]--;
+            matchs[g][j] = '?';
+        }
     }
-    if (!ok) dfs(t, g+1);
-    return;
+    if(!check) dfs(g+1);
 }
 
-
 int main(){
-    char c;
-    int n;
-    cin >> n;
-    while(n--){
-        Team t[4];
-        ans = 10;
-        for(int i = 0; i < 4; i++){
-            t[i].grade = i;
-            t[i].point = 0;
-            for(int j = 0; j < 4; j++){
-                cin >> out[i][j];
-                if (out[i][j] == 'W') t[i].point += 1;
+    int t;
+    scanf("%d", &t);
+    while(t--){
+        grade.clear();
+        for(int i = 1; i <= 4; i++){
+            grade.insert({i,0});
+            for(int j = 1; j <= 4; j++){
+                cin >> matchs[i][j];
+
+                if(i>j){
+                    grade[i] += (matchs[i][j]=='W'? 1:0);
+                    grade[j] += (matchs[i][j]=='L'? 1:0);
+                }
             }
         }
-        for(int i = 1; i < 4; i++){
-            if (out[0][i] == '?'){
-                out[0][i] = 'W';
-                out[i][0] = 'L';
-                t[0].point++;
+
+        for(int j = 2; j <= 4; j++){
+            if(matchs[1][j] == '?'){
+                matchs[1][j] = 'W';
+                matchs[j][1] = 'L';
+                grade[1]++; // 贪心
             }
         }
-        dfs(t, 1);
-        cout << ans << "\n";
+        ans = 5;
+        dfs(2);
+        printf("%d\n", ans);
     }
 }
